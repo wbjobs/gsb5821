@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本地分片加密 · AES-GCM + SHA-256</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.6 system-ui, sans-serif; background: #0f1420; color: #dbe4f0; }
+  main { max-width: 880px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #8fa1b8; margin-bottom: 16px; }
+  .card { background: #171e2e; border: 1px solid #263149; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  button { background: #2b6cb0; color: #fff; border: 0; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 14px; }
+  button:disabled { background: #2a3547; color: #66748a; cursor: not-allowed; }
+  #btnCancel { background: #8a3033; }
+  .progress { height: 14px; background: #0b101b; border-radius: 7px; overflow: hidden; margin: 12px 0 6px; }
+  #bar { height: 100%; width: 0; background: linear-gradient(90deg, #2b6cb0, #38b2ac); transition: width .15s linear; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 8px; }
+  .stat b { display: block; font-size: 16px; }
+  .stat span { color: #8fa1b8; font-size: 12px; }
+  #chunkGrid { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 10px; }
+  #chunkGrid i { width: 12px; height: 12px; border-radius: 3px; background: #2a3547; }
+  #chunkGrid i[data-s="done"] { background: #38a169; }
+  #chunkGrid i[data-s="retry"] { background: #d69e2e; }
+  #log { max-height: 180px; overflow: auto; font: 12px/1.5 ui-monospace, monospace; color: #9fb2c8; }
+  #log .warn { color: #d69e2e; } #log .err { color: #e53e3e; } #log .ok { color: #38a169; }
+  #hash { font: 12px ui-monospace, monospace; word-break: break-all; color: #38b2ac; margin-top: 8px; }
+  #degrade { background: #744210; color: #f6e05e; padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+  input[type=file] { color: #8fa1b8; }
+</style>
+</head>
+<body>
+<main>
+  <h1>本地分片加密工具</h1>
+  <div class="sub">File API + Streams + Web Crypto (AES-GCM) + Web Worker + IndexedDB — 纯本地，不上传</div>
+
+  <div class="card">
+    <div class="row">
+      <input type="file" id="file">
+      <button id="btnStart" disabled>开始</button>
+      <button id="btnPause" disabled>暂停</button>
+      <button id="btnResume" disabled>继续</button>
+      <button id="btnCancel" disabled>取消</button>
+      <span id="degrade" hidden>⚠ 配额不足：仅哈希模式</span>
+    </div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="stats">
+      <div class="stat"><b id="pct">0%</b><span>进度</span></div>
+      <div class="stat"><b id="speed">--</b><span>速度 (EWMA)</span></div>
+      <div class="stat"><b id="eta">--:--</b><span>剩余时间</span></div>
+      <div class="stat"><b id="state">空闲</b><span>状态</span></div>
+      <div class="stat"><b id="fps">FPS --</b><span>主线程</span></div>
+      <div class="stat"><b id="quota">--</b><span>存储用量</span></div>
+    </div>
+    <div id="chunkGrid"></div>
+    <div id="hash"></div>
+  </div>
+
+  <div class="card"><div id="log"></div></div>
+</main>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
