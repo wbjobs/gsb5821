@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本地分片加密 · AES-GCM + SHA-256</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>本地分片加密工具</h1>
+      <p class="subtitle">File API · Streams · Web Crypto · Web Worker · IndexedDB · PerformanceObserver —— 纯本地处理，不上传任何数据</p>
+    </header>
+
+    <section id="dropzone" class="dropzone">
+      <p>点击选择或拖拽文件到此处（建议 ≥ 1GB）</p>
+      <input type="file" id="fileInput" hidden />
+    </section>
+    <p id="fileInfo" class="file-info"></p>
+    <p id="resumeBanner" class="resume-banner" hidden></p>
+
+    <section class="controls">
+      <button id="btnStart" class="primary">开始</button>
+      <button id="btnPause">暂停</button>
+      <button id="btnResume">继续</button>
+      <button id="btnCancel" class="danger">取消</button>
+      <button id="btnRetry">重试</button>
+      <button id="btnVerify">校验</button>
+      <button id="btnExport">导出加密文件</button>
+      <button id="btnExportKey">导出密钥/清单</button>
+    </section>
+
+    <section class="progress-wrap">
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      <p id="progressText" class="progress-text">等待开始</p>
+    </section>
+
+    <p id="errorBox" class="error-box" hidden></p>
+    <p id="hashResult" class="hash-result"></p>
+
+    <section class="stats">
+      <div class="stat"><span class="label">状态</span><span id="statStatus">空闲</span></div>
+      <div class="stat"><span class="label">速度</span><span id="statSpeed">--</span></div>
+      <div class="stat"><span class="label">剩余时间</span><span id="statEta">--</span></div>
+      <div class="stat"><span class="label">已用时长</span><span id="statElapsed">--</span></div>
+      <div class="stat"><span class="label">分片进度</span><span id="statChunks">--</span></div>
+      <div class="stat"><span class="label">主线程帧率</span><span id="statFps">--</span></div>
+      <div class="stat"><span class="label">长任务(&gt;50ms)</span><span id="statLongtask">0 次</span></div>
+      <div class="stat"><span class="label">JS 堆内存</span><span id="statHeap">--</span></div>
+      <div class="stat"><span class="label">存储用量/配额</span><span id="statQuota">--</span></div>
+    </section>
+
+    <section>
+      <h2>运行日志</h2>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
